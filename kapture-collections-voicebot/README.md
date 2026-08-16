@@ -65,5 +65,5 @@ Vapi needs a publicly accessible URL to send webhook events.
 - **Automated Evals**: Scale testing by running `tests/test_cases.json` as simulated conversations against the Vapi API, using an LLM-as-a-judge to score the transcripts automatically.
 
 ## Demo
-- **Loom Recording**: [Insert Loom Link Here]
+- **Loom Recording**: https://drive.google.com/file/d/14E_6JQg7KbxXbq-5fPAIXyMNVvTsGnhn/view?usp=sharing, https://drive.google.com/file/d/15Gu-EWBAJ5KkGUyyREg4VL8i8WuuqO9O/view?usp=sharing
 - **Vapi Call Link**: [Insert Vapi Link Here]
