@@ -1,0 +1,110 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "verify_customer",
+      "description": "Verifies the customer using a 4-digit PIN or birth year before debt details can be disclosed.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "The customer's account ID."
+          },
+          "verification_code": {
+            "type": "string",
+            "description": "The 4-digit PIN or year provided by the customer."
+          }
+        },
+        "required": ["account_id", "verification_code"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "log_promise_to_pay",
+      "description": "Logs a Promise to Pay (PTP) when the customer agrees to a payment date and amount.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "The customer's account ID."
+          },
+          "ptp_date": {
+            "type": "string",
+            "description": "The agreed payment date in ISO-8601 format (e.g., YYYY-MM-DD)."
+          },
+          "amount": {
+            "type": "number",
+            "description": "The amount the customer promised to pay."
+          }
+        },
+        "required": ["account_id", "ptp_date", "amount"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "send_payment_link",
+      "description": "Sends a payment link to the customer.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "channel": {
+            "type": "string",
+            "enum": ["SMS", "WhatsApp", "BOTH"],
+            "description": "The channel to send the link through."
+          }
+        },
+        "required": ["account_id", "channel"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "escalate_to_agent",
+      "description": "Escalates the call to a human agent for hardship claims or disputes.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "enum": ["HARDSHIP_REQUEST", "DISPUTE"]
+          }
+        },
+        "required": ["reason"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "mark_disposition",
+      "description": "Logs the final disposition and outcome of the call.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["ALREADY_PAID", "DO_NOT_CALL", "WRONG_PERSON", "NO_INPUT", "ABUSIVE_CALLER", "AUTH_FAILED", "PTP_COLLECTED", "ESCALATED_DISPUTE"]
+          },
+          "notes": {
+            "type": "string",
+            "description": "Any additional notes regarding the disposition."
+          }
+        },
+        "required": ["account_id", "status"]
+      }
+    }
+  }
+]

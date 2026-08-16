@@ -1,0 +1,40 @@
+sequenceDiagram
+    participant User
+    participant Vapi (Orchestrator)
+    participant STT (Deepgram)
+    participant LLM (GPT-4o-mini)
+    participant TTS (Cartesia)
+    participant Webhook Server
+
+    rect rgb(200, 220, 240)
+        Note over User, Webhook Server: AUTHENTICATION PHASE (No Debt Disclosed)
+        User->>Vapi (Orchestrator): Speaks Verification Code
+        Vapi (Orchestrator)->>STT (Deepgram): Audio
+        STT (Deepgram)-->>Vapi (Orchestrator): Text (Code)
+        Vapi (Orchestrator)->>LLM (GPT-4o-mini): Context + Code
+        LLM (GPT-4o-mini)->>Vapi (Orchestrator): Call Tool: verify_customer
+        Vapi (Orchestrator)->>Webhook Server: POST /webhook (verify_customer)
+        Webhook Server-->>Vapi (Orchestrator): verified: true
+        Vapi (Orchestrator)->>LLM (GPT-4o-mini): Tool Result
+        LLM (GPT-4o-mini)->>Vapi (Orchestrator): Generate Greeting + Debt Disclosure
+        Vapi (Orchestrator)->>TTS (Cartesia): Text
+        TTS (Cartesia)-->>User: Audio
+    end
+
+    rect rgb(220, 240, 200)
+        Note over User, Webhook Server: NEGOTIATION PHASE
+        User->>Vapi (Orchestrator): "I will pay tomorrow"
+        Vapi (Orchestrator)->>STT (Deepgram): Audio
+        STT (Deepgram)-->>Vapi (Orchestrator): Text
+        Vapi (Orchestrator)->>LLM (GPT-4o-mini): Context + Text
+        LLM (GPT-4o-mini)->>Vapi (Orchestrator): Call Tool: log_promise_to_pay
+        Vapi (Orchestrator)->>Webhook Server: POST /webhook (log_promise_to_pay)
+        Webhook Server-->>Vapi (Orchestrator): success
+        Vapi (Orchestrator)->>LLM (GPT-4o-mini): Tool Result
+        LLM (GPT-4o-mini)->>Vapi (Orchestrator): Call Tool: send_payment_link
+        Vapi (Orchestrator)->>Webhook Server: POST /webhook (send_payment_link)
+        Webhook Server-->>Vapi (Orchestrator): success
+        Vapi (Orchestrator)->>LLM (GPT-4o-mini): Generate Confirmation
+        Vapi (Orchestrator)->>TTS (Cartesia): Text
+        TTS (Cartesia)-->>User: Audio
+    end
